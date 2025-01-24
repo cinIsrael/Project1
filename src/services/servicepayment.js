@@ -16,4 +16,7 @@ let payment = [];
 
         return payment;
     };
+        exports.findPayment = (id) => {
+            return payment.find((p) => p.id === id);
+        }
     
