@@ -1,19 +1,23 @@
 const { processPayment, findPayment } = require("../services/paymentService");
 
-exports.initiatePayment = (req, res) => {
+exports.initiatePayment = async (req, res) => {
     const { name, email, amount } = req.body;
 
     if (!name || !email || !amount) {
         return res.status(400).json({ status: "error", message: "Name, email, and amount are required" });
     }
 
-    const payment = processPayment(name, email, amount);
+    try {
+        const payment = await processPayment(name, email, amount); // Ensure async call
 
-    res.status(201).json({
-        status: "success",
-        message: "Payment initiated successfully",
-        payment,
-    });
+        res.status(201).json({
+            status: "success",
+            message: "Payment initiated successfully",
+            payment,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "error", message: "An error occurred during payment processing" });
+    }
 };
 
 exports.getPaymentStatus = (req, res) => {
